@@ -50,7 +50,7 @@ try{
 
     <div class="container">
 		<h1><?php echo $news["title"]?></h1>
-		
+		<p><?php echo time()?></p>
 		<div>
 			<?php echo nl2br($news["content"])?>
 		</div>
@@ -73,14 +73,20 @@ try{
     var loading = '<img src="https://i0.wp.com/cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif"> Loading...'
         
     function loadComments(page) {
+        //place loading sign in comment container
     	$("#comments").html(loading)
+        
+        //ajax request to get comments
+        //1. remote url
+        //2. call function 
         $.get("comments-ajax.php?nid=<?php echo $_GET["nid"]?>&page="+page,function(data){
         	$("#comments").html(data)
-        })
+       	})
     }
+    
     $().ready(function() {
         loadComments(1)
-
+		
         $("#comments").on("click","ul.pagination a",function(){
             var page = $(this).attr("data-page")
             loadComments(page)

@@ -52,7 +52,7 @@ try{
 
     <div class="container">
 		<h1><?php echo $news["title"]?></h1>
-		
+		<?php echo time()?>
 		<div>
 			<?php echo nl2br($news["content"])?>
 		</div>
@@ -115,13 +115,20 @@ try{
 
         $("#comment-form").submit(function(){
 
+			//disable submit btn
             $(this).find(".btn").attr("disabled",true)
+            //display loading sign
             $("#submitting").show()
+			
+			//do ajax post
+			//1. remote url, 2. form data, 3. callback function
 			$.post($(this).attr("action"),$(this).serialize(),function(response){
-
+				//enable btn
 				$("#comment-form").find(".btn").removeAttr('disabled')
+				//hide loading sign
 				$("#submitting").hide()
 				
+				// check if success
 				if(response == "s") {
 					$("#notice").addClass("alert-success").removeClass("alert-danger").html("<strong>Success!</strong> Thank you.")
 					loadComments(1)
@@ -135,6 +142,7 @@ try{
 				
 				
 			})
+			
 			return false
         })
 		

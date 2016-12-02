@@ -52,7 +52,7 @@ $pagination = new paginate($db,"SELECT * FROM comments where news_id = {$_GET["n
 
     <div class="container">
 		<h1><?php echo $news["title"]?></h1>
-		
+		<p><?php echo time()?></p>
 		<div>
 			<?php echo nl2br($news["content"])?>
 		</div>
