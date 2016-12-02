@@ -23,8 +23,9 @@ class TaskController extends Controller
 	 */
 	public function index(Request $request)
 	{
-	    $tasks = Task::all();
-
+	    // $tasks = Task::all();
+		$tasks = Task::where('user_id', $request->user()->id)->get();
+		
 	    return view('tasks.index', [
 	        'tasks' => $tasks,
 	    ]);
@@ -43,9 +44,13 @@ class TaskController extends Controller
 
 	    ]);
 
-	    $task = new Task; 
-	    $task->name = $request->name; 
-	    $task->save();
+	    // $task = new Task; 
+	    // $task->name = $request->name; 
+	    // $task->save();
+
+	    $request->user()->tasks()->create([
+	        'name' => $request->name,
+	    ]);
 
 	    return redirect('/tasks'); 
 	}
