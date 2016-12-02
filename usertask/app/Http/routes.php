@@ -28,7 +28,7 @@ Route::post('task', 'TaskController@save');
 /**
  * Delete An Existing Task
  */
-Route::delete('task/{id}', 'TaskController@delete');
+Route::delete('task/{task}', 'TaskController@delete');
 
 
 Route::auth();

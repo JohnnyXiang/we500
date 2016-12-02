@@ -6,13 +6,32 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Task;
+
+use App\Repositories\TaskRepository;
+
 class TaskController extends Controller
 {
     
-    public function __construct()
-	{
-	    $this->middleware('auth');
-	}
+    /**
+     * The task repository instance.
+     *
+     * @var TaskRepository
+     */
+    protected $tasks;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @param  TaskRepository  $tasks
+     * @return void
+     */
+    public function __construct(TaskRepository $tasks)
+    {
+        $this->middleware('auth');
+
+        $this->tasks = $tasks;
+    }
+
 
 
 	 /**
@@ -24,10 +43,11 @@ class TaskController extends Controller
 	public function index(Request $request)
 	{
 	    // $tasks = Task::all();
-		$tasks = Task::where('user_id', $request->user()->id)->get();
-		
+		// $tasks = Task::where('user_id', $request->user()->id)->get();
+		$tasks = $this->tasks->forUser($request->user());
+
 	    return view('tasks.index', [
-	        'tasks' => $tasks,
+	        'tasks' => $tasks
 	    ]);
 	}
 
@@ -57,19 +77,19 @@ class TaskController extends Controller
 
 
 	/**
-	 * delete the given task.
+	 * Destroy the given task.
 	 *
 	 * @param  Request  $request
-	 * @param  string  $taskId
+	 * @param  Task  $task
 	 * @return Response
 	 */
-	public function delete(Request $request, $taskId)
-	{  
-		
-	    $task = Task::findOrFail($taskId);
-	    $task->delete();
-	    return redirect('/tasks');
+	public function delete(Request $request, Task $task)
+	{
+	    $this->authorize('destroy', $task);
 
+	    $task->delete();
+
+	    return redirect('/tasks');
 	}
 
 }
